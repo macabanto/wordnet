@@ -1,0 +1,41 @@
+#place this back into docker-compose.yml after done testing
+<
+  scraper_worker_1:
+    build: .
+    environment:
+      - WORKER_ID=1
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes:
+      - ./proxies:/proxies
+    depends_on:
+      - redis
+      - mongo
+
+  scraper_worker_2:
+    build: .
+    environment:
+      - WORKER_ID=2
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes:
+      - ./proxies:/proxies
+    depends_on:
+      - redis
+      - mongo
+
+  scraper_worker_3:
+    build: .
+    environment:
+      - WORKER_ID=3
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes:
+      - ./proxies:/proxies
+    depends_on:
+      - redis
+      - mongo
+      >

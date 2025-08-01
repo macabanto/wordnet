@@ -1,0 +1,24 @@
+services:
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+
+  scraper_worker_0:
+    build: .
+    environment:
+      - WORKER_ID=0
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes:
+      - ./proxies:/proxies
+    depends_on:
+      - redis
+      - mongo
+    command: ["python", "-u", "worker.py"]
