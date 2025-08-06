@@ -89,6 +89,17 @@ services:
     command: ["python", "-u", "scraper.py"]
     restart: unless-stopped
 
+  linker:
+    build: .
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+    volumes:
+      - .:/app
+    depends_on:
+      - mongo
+    command: ["python", "-u", "link_lemmas.py"]
+    restart: "no"
+
   init_proxies:
     build: .
     volumes:
