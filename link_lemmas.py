@@ -54,22 +54,19 @@ for doc in cursor:
         synonyms = doc.get("synonyms", [])
 
         linked = []
-        resolved_count = 0
-        unresolved_count = 0
+        unlinked = []
 
         for syn in synonyms:
             resolved = resolve_synonym(pos, syn, synonyms)
             if resolved:
                 linked.append({ "term": syn, "id": resolved })
-                resolved_count += 1
             else:
-                linked.append({ "term": syn, "id": None })
-                unresolved_count += 1
+                unlinked.append(syn)
 
-        if unresolved_count == 0:
-            print(f'[💡] Linking: "{term}" ({resolved_count}/{len(synonyms)} synonyms linked)')
+        if not unlinked:
+            print(f'[💡] Linking: "{term}" ({len(linked)}/{len(synonyms)} synonyms linked)')
         else:
-            print(f'[⚠️] Linking: "{term}" ({resolved_count}/{len(synonyms)} linked, {unresolved_count} unresolved)')
+            print(f'[⚠️] Linking: "{term}" ({len(linked)}/{len(synonyms)} linked, {len(unlinked)} unresolved)')
 
         # Save to lemmas-linked
         new_doc = {
@@ -77,23 +74,23 @@ for doc in cursor:
             "term": term,
             "part_of_speech": pos,
             "definition": doc.get("definition"),
-            "linked_synonyms": linked
+            "linked_synonyms": linked,
+            "unlinked_synonyms": unlinked
         }
         dst.insert_one(new_doc)
         linked_count += 1
 
         # Save to lemmas-unlinked if any failures
-        if unresolved_count > 0:
-            if failed.count_documents({"_id": doc["_id"]}) == 0:
+        if unlinked:
+            if failed.count_documents({ "_id": doc["_id"] }) == 0:
                 failed.insert_one({
                     "_id": doc["_id"],
                     "term": term,
                     "part_of_speech": pos,
                     "definition": doc.get("definition"),
-                    "synonyms": synonyms,
                     "linked_synonyms": linked,
-                    "resolved_count": resolved_count,
-                    "unresolved_count": unresolved_count
+                    "unlinked_synonyms": unlinked,
+                    "unresolved_count": len(unlinked)
                 })
 
     except Exception as e:
