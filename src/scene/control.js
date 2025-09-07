@@ -8,41 +8,59 @@ export function installControls({
   mouse,
   nodeObjects,
   onClickSprite,
-  rotateTarget   // e.g., your scene or a group
+  rotateTarget   // usually your scene
 }) {
   let isDragging = false;
   let clickCandidate = false;
-
-  // last pointer pos seen by the system (updated by mousemove)
   let lastSeen = { x: 0, y: 0 };
-  // the reference we integrate from each frame while dragging
   let prev = { x: 0, y: 0 };
 
-  // angular velocity for inertia (axis * radians per frame)
+  // inertia
   let angularVelocity = new THREE.Vector3();
+
+  // hover
+  let hovered = null;
 
   const DRAG_CANCEL_PX = CONFIG.CLICK_THRESHOLD_PX ?? 5;
   const DRAG_SENS      = CONFIG.ROT_SPEED ?? 0.005;
   const INERTIA_DECAY  = CONFIG.INERTIA_DECAY ?? 0.92;
 
-  // --- mouse listeners only update state; no rotation here ---
   function onMouseMove(e) {
-    // normalized mouse for raycaster
+    // always update mouse coords for raycaster
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
     lastSeen = { x: e.clientX, y: e.clientY };
+
+    // --- HOVER LOGIC ---
+    raycaster.setFromCamera(mouse, camera);
+    const hit = raycaster.intersectObjects(nodeObjects, false)[0];
+
+    if (hit?.object !== hovered) {
+      if (hovered) {
+        hovered.material.color.set(CONFIG.SPRITE_COLOR ?? 'white'); // reset old
+      }
+      if (hit?.object) {
+        hit.object.material.color.set('teal'); // highlight new
+      }
+      hovered = hit?.object ?? null;
+    }
   }
 
   function onMouseDown(e) {
     isDragging = true;
     clickCandidate = true;
     prev = lastSeen = { x: e.clientX, y: e.clientY };
-    angularVelocity.set(0, 0, 0); // stop inertia immediately
+    angularVelocity.set(0, 0, 0); // stop inertia
   }
 
-  function onMouseUp() {
+  function onMouseUp(e) {
     isDragging = false;
+
+    // refresh coords in case no move occurred
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    lastSeen = { x: e.clientX, y: e.clientY };
+
     const movedFar =
       Math.abs(prev.x - lastSeen.x) > DRAG_CANCEL_PX ||
       Math.abs(prev.y - lastSeen.y) > DRAG_CANCEL_PX;
@@ -55,12 +73,11 @@ export function installControls({
     if (hit?.object) onClickSprite?.(hit.object);
   }
 
-  // --- per-frame tick: handle both dragging and inertia smoothly ---
+  // --- per-frame tick ---
   function tick(target3D = rotateTarget) {
     if (!target3D) return;
 
     if (isDragging) {
-      // integrate all mouse movement accumulated since the last frame
       const dx = lastSeen.x - prev.x;
       const dy = lastSeen.y - prev.y;
       if (dx !== 0 || dy !== 0) {
@@ -71,9 +88,8 @@ export function installControls({
         const up = camera.up.clone().normalize();
         const right = new THREE.Vector3().crossVectors(forward, up).normalize();
 
-        // build delta from this frame's mouse movement
-        const yawDelta   = dx * DRAG_SENS; // left/right
-        const pitchDelta = dy * DRAG_SENS; // up/down
+        const yawDelta   = dx * DRAG_SENS;
+        const pitchDelta = dy * DRAG_SENS;
 
         const qYaw   = new THREE.Quaternion().setFromAxisAngle(up,    yawDelta);
         const qPitch = new THREE.Quaternion().setFromAxisAngle(right, pitchDelta);
@@ -81,7 +97,7 @@ export function installControls({
 
         target3D.quaternion.premultiply(qDelta);
 
-        // update angular velocity from qDelta so when user releases, inertia continues smoothly
+        // inertia from delta
         const angle = 2 * Math.acos(Math.min(1, qDelta.w));
         if (angle > 1e-6) {
           const s = Math.sqrt(1 - qDelta.w * qDelta.w);
@@ -89,10 +105,10 @@ export function installControls({
           angularVelocity.copy(axis.multiplyScalar(angle));
         }
       }
-      return; // while dragging, skip inertia
+      return;
     }
 
-    // inertia path (no drag)
+    // inertia path
     if (angularVelocity.lengthSq() > 1e-8) {
       const angle = angularVelocity.length();
       const axis = angularVelocity.clone().normalize();
@@ -108,7 +124,7 @@ export function installControls({
   document.addEventListener('mouseup', onMouseUp);
 
   return {
-    tick, // call every frame
+    tick,
     getAngularVelocity: () => angularVelocity.clone(),
     get dragging() { return isDragging; },
     dispose() {
