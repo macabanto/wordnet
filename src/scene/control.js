@@ -53,25 +53,35 @@ export function installControls({
     angularVelocity.set(0, 0, 0); // stop inertia
   }
 
-  function onMouseUp(e) {
-    isDragging = false;
+function onMouseUp(e) {
+  isDragging = false;
 
-    // refresh coords in case no move occurred
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-    lastSeen = { x: e.clientX, y: e.clientY };
+  // refresh coords in case no move occurred
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  lastSeen = { x: e.clientX, y: e.clientY };
 
-    const movedFar =
-      Math.abs(prev.x - lastSeen.x) > DRAG_CANCEL_PX ||
-      Math.abs(prev.y - lastSeen.y) > DRAG_CANCEL_PX;
-    const click = clickCandidate && !movedFar;
-    clickCandidate = false;
+  const movedFar =
+    Math.abs(prev.x - lastSeen.x) > DRAG_CANCEL_PX ||
+    Math.abs(prev.y - lastSeen.y) > DRAG_CANCEL_PX;
+  const click = clickCandidate && !movedFar;
+  clickCandidate = false;
 
-    if (!click) return;
-    raycaster.setFromCamera(mouse, camera);
-    const hit = raycaster.intersectObjects(nodeObjects, false)[0];
-    if (hit?.object) onClickSprite?.(hit.object);
+  console.log('mouseup:', {
+    prev, lastSeen, movedFar, clickCandidate, click
+  });
+
+  if (!click) return;
+
+  raycaster.setFromCamera(mouse, camera);
+  const hits = raycaster.intersectObjects(nodeObjects, true); // try true to include children
+  console.log('raycaster hits:', hits);
+
+  if (hits.length > 0) {
+    console.log('clicked object:', hits[0].object);
+    onClickSprite?.(hits[0].object);
   }
+}
 
   // --- per-frame tick ---
   function tick(target3D = rotateTarget) {

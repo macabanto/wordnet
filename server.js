@@ -9,8 +9,10 @@ const DB_NAME = process.env.DB_NAME || 'lemmas';
 const COLLECTION = process.env.COLLECTION || 'lemmas-linked-second-degree';
 
 app.use(cors({
-  origin: ['https://macabanto.github.io'],
-  methods: ['GET'],
+  origin: ['https://macabanto.github.io', 'http://localhost:5173'], // add dev + prod origins
+  methods: ['GET', 'OPTIONS'], // allow preflight
+  allowedHeaders: ['Content-Type'], // safe default
+  maxAge: 86400 // cache preflight for 24h
 }));
 // Fail fast if Mongo isn't reachable
 const client = new MongoClient(MONGO_URI, { serverSelectionTimeoutMS: 3000 });

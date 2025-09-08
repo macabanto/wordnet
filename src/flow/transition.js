@@ -1,10 +1,12 @@
+// flow/transition.js
 import * as THREE from 'three';
 import { CONFIG } from '../config.js';
 import { scene, nodeGroup } from '../scene/scene.js';
 import { loadTermById } from '../data/api.js';
 import { getId } from '../data/id.js';
-import { nodeById, currentSynIdsFromScene, nodeObjects, removeNode } from '../graph/state.js';
+import { nodeById, currentSynIdsFromScene, nodeObjects, removeNode, registerNode } from '../graph/state.js';
 import { makeAnchorAt } from '../graph/anchors.js';
+import { createTextSprite } from '../graph/sprites.js';
 
 // --- tiny math ---
 const ZERO = new THREE.Vector3(0,0,0);
@@ -182,8 +184,7 @@ export async function transitionToNode(clicked, mode = 'parallel') {
 
   // center bookkeeping
   nodeGroup.userData.center = clicked;
-  clicked.userData.isCenter = true;
-  clicked.userData.isSynonym = false;
+  Object.assign(clicked.userData, { isCenter: true, isSynonym: false });
   { const i = nodeObjects.indexOf(clicked); if (i !== -1) nodeObjects.splice(i, 1); }
 
   // frozen anchor at old center after recenter
@@ -209,8 +210,7 @@ export async function transitionToNode(clicked, mode = 'parallel') {
   let prevTask = Promise.resolve();
   if (oldCenter && oldCenter !== clicked) {
     if (prevIsInNew) {
-      oldCenter.userData.isCenter = false;
-      oldCenter.userData.isSynonym = true;
+      Object.assign(oldCenter.userData, { isCenter: false, isSynonym: true });
       if (!nodeObjects.includes(oldCenter)) nodeObjects.push(oldCenter);
       prevTask = guard(tweenPosition(oldCenter, targetPos[prevCenterId], {
         duration: schedule.shared.dur, token
@@ -237,47 +237,29 @@ export async function transitionToNode(clicked, mode = 'parallel') {
     );
   });
 
+  // fresh nodes: create via factory, merge userData, register so hover/click works
   const freshSet = new Set(current);
   const freshTasks = (doc.linked_synonyms || []).map((s) => {
     const sid = getId(s);
     if (!sid || !freshSet.has(sid)) return Promise.resolve();
 
-    const sprite = createTextSprite(s.term); // lazy import to avoid circular
-    function createTextSprite(term) {
-      // tiny inline—keeps module boundaries simple; or import from graph/sprites
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      const fontSize = 32, padding = 20, dpr = window.devicePixelRatio || 1;
-      ctx.font = `bold ${fontSize}px Arial`;
-      const w = ctx.measureText(term).width, h = fontSize;
-      canvas.width = (w + padding * 2) * dpr;
-      canvas.height = (h + padding * 2) * dpr;
-      ctx.scale(dpr, dpr);
-      ctx.font = `bold ${fontSize}px Arial`;
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillStyle = '#fff';
-      ctx.fillText(term, (canvas.width/dpr)/2, (canvas.height/dpr)/2);
-      const texture = new THREE.Texture(canvas); texture.needsUpdate = true;
-      const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
-      const sprite = new THREE.Sprite(material);
-      sprite.scale.set(canvas.width/dpr/6, canvas.height/dpr/6, 1);
-      return sprite;
-    }
+    const spriteNode = createTextSprite(s.term, { id: sid, term: s.term, isSynonym: true });
 
-    const spriteNode = createTextSprite(s.term);
-    spriteNode.userData = { id: sid, term: s.term, isSynonym: true };
     nodeGroup.add(spriteNode);
-    // quick register (no import to avoid cycles)
-    const id = spriteNode.userData.id;
-    if (id) { /* minimal: defer to external state if you want */ }
+    registerNode(spriteNode);
 
     const tgt = targetPos[sid];
     const dir = tgt.clone().sub(clicked.position);
     const spawn = dir.lengthSq() === 0
       ? clicked.position.clone()
       : clicked.position.clone().add(dir.multiplyScalar(0.15));
+
     spriteNode.position.copy(spawn);
-    if (spriteNode.material) { spriteNode.material.transparent = true; spriteNode.material.opacity = 0; }
+    if (spriteNode.material) {
+      spriteNode.material.transparent = true;
+      spriteNode.material.opacity = 0;
+      spriteNode.material.color?.set?.(CONFIG.SPRITE_COLOR ?? '#ffffff');
+    }
 
     return delay(schedule.fresh.delay, token).then(() =>
       guard(tweenPosition(spriteNode, tgt, {

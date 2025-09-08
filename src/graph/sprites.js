@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { CONFIG } from '../config.js';
 
-export function createTextSprite(text) {
+export function createTextSprite(text, meta = {}) {
   const fontSize = CONFIG.SPRITE_FONT_SIZE;
   const padding = CONFIG.SPRITE_PADDING;
   const dpr = window.devicePixelRatio || 1;
@@ -24,7 +24,7 @@ export function createTextSprite(text) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.shadowColor = 'black';
   ctx.shadowBlur = CONFIG.SPRITE_SHADOW_BLUR;
-  ctx.fillStyle = 'white'; // << always white
+  ctx.fillStyle = 'white'; // always white, tint later
   ctx.fillText(text, (canvas.width / dpr) / 2, (canvas.height / dpr) / 2);
 
   // --- make texture ---
@@ -47,6 +47,21 @@ export function createTextSprite(text) {
     canvas.height / dpr / scaleDivisor,
     1
   );
+
+  // --- attach metadata for click handling ---
+  const id =
+    typeof meta.id === 'object' && meta.id?.$oid ? meta.id.$oid :
+    typeof meta.id === 'object' && meta.id?._id  ? meta.id._id  :
+    meta.id;
+
+  sprite.userData = {
+    type: 'textSprite',
+    term: text,
+    ...meta,
+    id, // ensure it's always directly available
+  };
+
+  sprite.name = meta.term || text; // useful in dev tools
 
   return sprite;
 }

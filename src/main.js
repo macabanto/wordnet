@@ -20,11 +20,23 @@ const controls = installControls({
   raycaster,
   mouse,
   nodeObjects,
-  onClickSprite: async (clicked) => { /* ... */ },
-  rotateTarget: scene                 // ⇦ NEW
+  rotateTarget: scene,
+  onClickSprite: async (clicked) => {
+    const id = clicked?.userData?.id;
+    if (!id) {
+      console.warn('Clicked sprite lacks userData.id:', clicked?.userData);
+      return;
+    }
+    try {
+      TransitionManager.cancelAll();
+      await transitionToNode(clicked, CONFIG.TRANSITION_MODE || 'serial');
+    } catch (e) {
+      console.error('transition error:', e);
+    }
+  }
 });
 
-// HUD (can still show quaternion, velocities, etc.)
+// HUD
 const hud = createPoseHUD({
   scene,
   camera,
@@ -34,7 +46,7 @@ const hud = createPoseHUD({
 
 function animate() {
   requestAnimationFrame(animate);
-  controls.tick();    // now handles both drag and inertia smoothly
+  controls.tick();        // drag + inertia
   hud.update();
   renderer.render(scene, camera);
 }
