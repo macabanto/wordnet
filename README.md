@@ -43,3 +43,13 @@ documents stored in mongodb follow this structure:
 
 
 by this point, the system can be left alone, it will iteratively scrape the collins-online-thesaurus for each lemma found per page, once the queue is emtpy, a new word can be added however it could be difficult to find which words have not already been processed.
+
+'docker ps' - List running containers / See what’s up and which ports are mapped
+'docker compose ps' - Inspect Compose services / Shows status from compose perspective
+'docker logs -f <container>' - View logs / Follow logs for any container
+'docker exec -it <container> sh' - Run a one-off command / Drop into container shell
+'docker exec -it api sh -lc 'curl -sS http://localhost:3001/ping'' - Test API inside container / Confirms app is serving internally
+'curl -s http://localhost:3001/ping' - Test API from host / Confirms port mapping is working
+'curl -s -D- https://api.word-graph.net/ping' - Test API through Cloudflare / head
+'docker exec -it api sh -lc ’ss -ltnp' - Check ports inside container / grep 3001
+'docker inspect –format ‘{{json .State.Health}}’ api' - Inspect container health / jq
