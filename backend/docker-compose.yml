@@ -1,0 +1,143 @@
+services:
+  # ---------- DATA LAYER ----------
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: unless-stopped
+    ports: ["6379:6379"]
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "PING"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    restart: unless-stopped
+    ports: ["27017:27017"]    # publish if you connect from host tools
+    volumes:
+      - mongo_data:/data/db
+      - /var/backups/mongodb/weekly:/backup
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---------- WORKERS ----------
+  scraper_worker_0:
+    build: .
+    container_name: worker_0
+    restart: unless-stopped
+    environment:
+      - WORKER_ID=0
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes: ["./proxies:/proxies"]
+    depends_on:
+      redis: { condition: service_healthy }
+      mongo: { condition: service_healthy }
+    command: ["python","-u","compose-scripts/scraper.py"]
+
+  scraper_worker_1:
+    build: .
+    container_name: worker_1
+    restart: unless-stopped
+    environment:
+      - WORKER_ID=1
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes: ["./proxies:/proxies"]
+    depends_on:
+      redis: { condition: service_healthy }
+      mongo: { condition: service_healthy }
+    command: ["python","-u","compose-scripts/scraper.py"]
+
+  scraper_worker_2:
+    build: .
+    container_name: worker_2
+    restart: unless-stopped
+    environment:
+      - WORKER_ID=2
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes: ["./proxies:/proxies"]
+    depends_on:
+      redis: { condition: service_healthy }
+      mongo: { condition: service_healthy }
+    command: ["python","-u","compose-scripts/scraper.py"]
+
+  scraper_worker_3:
+    build: .
+    container_name: worker_3
+    restart: unless-stopped
+    environment:
+      - WORKER_ID=3
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes: ["./proxies:/proxies"]
+    depends_on:
+      redis: { condition: service_healthy }
+      mongo: { condition: service_healthy }
+    command: ["python","-u","compose-scripts/scraper.py"]
+
+  scraper_worker_4:
+    build: .
+    container_name: worker_4
+    restart: unless-stopped
+    environment:
+      - WORKER_ID=4
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes: ["./proxies:/proxies"]
+    depends_on:
+      redis: { condition: service_healthy }
+      mongo: { condition: service_healthy }
+    command: ["python","-u","compose-scripts/scraper.py"]
+
+  init_proxies:
+    build: .
+    container_name: init_proxies
+    restart: "no"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes: ["./proxies:/proxies"]
+    depends_on:
+      redis: { condition: service_healthy }
+    command: ["python","-u","compose-scripts/init_proxies.py"]
+
+  # ---------- API ----------
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api
+    restart: unless-stopped
+    environment:
+      PORT: "3001"
+      MONGO_URI: "mongodb://mongo:27017"
+      DB_NAME: "lemmas"
+      COLLECTION: "lemmas-linked-second-degree"
+      NODE_ENV: "production"
+    depends_on:
+      mongo: { condition: service_healthy }
+    ports: ["3001:3001"]         # publish to host for the tunnel
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3001/ping',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  redis_data:
+  mongo_data:
