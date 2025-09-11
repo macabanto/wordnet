@@ -1,0 +1,2 @@
+export function intersect(arrA, arrB) { const s = new Set(arrB); return arrA.filter(x => s.has(x)); }
+export function subtract(arrA, arrB)  { const s = new Set(arrB); return arrA.filter(x => !s.has(x)); }

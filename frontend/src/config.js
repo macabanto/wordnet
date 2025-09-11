@@ -1,0 +1,30 @@
+// Central place for tunables. Keep your existing values here.
+export const CONFIG = {
+  API_BASE: import.meta?.env?.VITE_API_BASE ?? '',
+  INITIAL_TERM_ID: '6890af9c82f836005c903e18',
+
+  CAMERA_FOV: 60,
+  CAMERA_NEAR: 0.1,
+  CAMERA_FAR: 10000,
+  CAMERA_Z: 600,
+
+  SPRITE_COLOR: '#ffffff',
+  SPRITE_FONT_SIZE: 52,
+  SPRITE_PADDING: 20,
+  SPRITE_SHADOW_BLUR: 8,
+  SPRITE_SCALE_DIVISOR: 6,
+  SPRITE_THRESHOLD: 0.7,
+
+  LINE_COLOR: 0x888888,
+
+  CLICK_THRESHOLD_PX: 4,
+  INVERT_X: false,
+  INVERT_Y: false,
+  ROT_SPEED: 0.004,
+  INERTIA_DECAY: 0.92,
+  VELOCITY_EPS: 0.0003,
+
+  ANIM_TRANSLATE_MS: 500,
+  ANIM_EXPAND_MS: 900,
+  TRANSITION_MODE: 'serial', // or 'parallel'
+};
