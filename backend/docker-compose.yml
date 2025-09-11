@@ -1,0 +1,116 @@
+services:
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  scraper_worker_0:
+    build: .
+    environment:
+      - WORKER_ID=0
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes:
+      - ./proxies:/proxies
+    depends_on:
+      - redis
+      - mongo
+    command: ["python", "-u", "scraper.py"]
+    restart: unless-stopped
+  
+  scraper_worker_1:
+    build: .
+    environment:
+      - WORKER_ID=1
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes:
+      - ./proxies:/proxies
+    depends_on:
+      - redis
+      - mongo
+    command: ["python", "-u", "scraper.py"]
+    restart: unless-stopped
+
+  scraper_worker_2:
+    build: .
+    environment:
+      - WORKER_ID=2
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes:
+      - ./proxies:/proxies
+    depends_on:
+      - redis
+      - mongo
+    command: ["python", "-u", "scraper.py"]
+    restart: unless-stopped
+
+  scraper_worker_3:
+    build: .
+    environment:
+      - WORKER_ID=3
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes:
+      - ./proxies:/proxies
+    depends_on:
+      - redis
+      - mongo
+    command: ["python", "-u", "scraper.py"]
+    restart: unless-stopped
+
+  scraper_worker_4:
+    build: .
+    environment:
+      - WORKER_ID=4
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongo:27017
+    volumes:
+      - ./proxies:/proxies
+    depends_on:
+      - redis
+      - mongo
+    command: ["python", "-u", "scraper.py"]
+    restart: unless-stopped
+
+  linker:
+    build: .
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+    volumes:
+      - .:/app
+    depends_on:
+      - mongo
+    command: ["python", "-u", "link_lemmas.py"]
+    restart: "no"
+
+  init_proxies:
+    build: .
+    volumes:
+      - ./proxies:/proxies
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    command: ["python", "-u", "init_proxies.py"]
+
+volumes:
+  redis_data:
+  mongo_data:
