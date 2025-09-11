@@ -1,4 +1,4 @@
-# Logs
+# ────────────── Logs ──────────────
 logs
 *.log
 npm-debug.log*
@@ -7,15 +7,20 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# ────────────── Dependencies ──────────────
+node_modules/
+
+# ────────────── Build output ──────────────
+dist/
+dist-ssr/
+
+# ────────────── Local env overrides ──────────────
 *.local
 
-# Editor directories and files
+# ────────────── Editor / OS files ──────────────
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
@@ -23,11 +28,10 @@ dist-ssr
 *.sln
 *.sw?
 
-#ENV
+# ────────────── Environment variables ──────────────
 .env.development
 .env.production
 
-// if cloudflare goes down : cloudflared tunnel --url http://127.0.0.1:3001
-// npm run build - rebuild dist
-// npm run deploy - send dist to github
-// node server.js - run node server
+# ────────────── Other ──────────────
+# Ignore backup/lock files just in case
+*.lock-wscript
