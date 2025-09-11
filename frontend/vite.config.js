@@ -2,8 +2,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  // IMPORTANT: project site lives at /wordnet-frontend/
-  base: '/wordnet-frontend/',
+  base: '/wordnet/',
 
   // Dev server (local only)
   server: {
