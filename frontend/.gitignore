@@ -29,9 +29,8 @@ dist-ssr/
 *.sw?
 
 # ────────────── Environment variables ──────────────
-.env.development
-.env.production
+.env*
+!.env.example
 
 # ────────────── Other ──────────────
-# Ignore backup/lock files just in case
 *.lock-wscript
