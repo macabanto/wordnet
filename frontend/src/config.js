@@ -1,15 +1,15 @@
 // Central place for tunables. Keep your existing values here.
 export const CONFIG = {
-  API_BASE: import.meta?.env?.VITE_API_BASE ?? '',
+  API_BASE: import.meta.env.VITE_API_BASE ?? '',
   INITIAL_TERM_ID: '6890af9c82f836005c903e18',
 
   CAMERA_FOV: 60,
   CAMERA_NEAR: 0.1,
   CAMERA_FAR: 10000,
-  CAMERA_Z: 600,
+  CAMERA_Z: 400,
 
   SPRITE_COLOR: '#ffffff',
-  SPRITE_FONT_SIZE: 52,
+  SPRITE_FONT_SIZE: 64,
   SPRITE_PADDING: 20,
   SPRITE_SHADOW_BLUR: 8,
   SPRITE_SCALE_DIVISOR: 6,
