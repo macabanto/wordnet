@@ -10,20 +10,17 @@ from collections import defaultdict
 # -------------------------
 # Config
 # -------------------------
-# Root to scan; override by passing a path as argv[1]
 DEFAULT_SRC_ROOT = Path(__file__).resolve().parent.parent / "frontend" / "src"
-# Output file
 OUTPUT_XML = Path(__file__).resolve().parent / "diagram.drawio"
 
 # Layout
-COLS = 3                  # number of file columns
-FILE_W, FILE_H = 180, 60  # parallelogram size
-CELL_W, CELL_H = 180, 40  # var/func cell size
-X_GAP, Y_GAP = 280, 220   # gaps between file boxes in grid
-STACK_VGAP = 66           # vertical spacing between stacked var/func cells
-# Where variables/functions stack relative to the file box (offsets)
-VARS_OFFSET = (0, 100)    # left/below the file box
-FUNCS_OFFSET = (220, 0)   # right of the file box
+COLS = 3
+FILE_W, FILE_H = 180, 60
+CELL_W, CELL_H = 180, 40
+X_GAP, Y_GAP = 280, 220
+STACK_VGAP = 66
+VARS_OFFSET = (0, 100)
+FUNCS_OFFSET = (220, 0)
 
 # -------------------------
 # Unique ID factory
@@ -40,29 +37,37 @@ def next_id(prefix: str) -> str:
 # -------------------------
 # Parsing helpers
 # -------------------------
-RE_IMPORT = re.compile(r'^\s*import\s+(?:[^"\']+?\s+from\s+)?["\'](.+?)["\']', re.M)
+# previous regexes (kept)
 RE_FUNC_DECL = re.compile(r'^\s*export\s+function\s+([A-Za-z0-9_$]+)\s*\(|^\s*function\s+([A-Za-z0-9_$]+)\s*\(', re.M)
-RE_FUNC_EXPR = re.compile(r'^\s*(?:export\s+)?(?:const|let|var)\s+([A-Za-z0-9_$]+)\s*=\s*\(.*?\)\s*=>', re.M)
-RE_VAR = re.compile(r'^\s*(?:export\s+)?(const|let|var)\s+([A-Za-z0-9_$]+)\s*=\s*(.+?);?\s*$', re.M)
+RE_FUNC_EXPR  = re.compile(r'^\s*(?:export\s+)?(?:const|let|var)\s+([A-Za-z0-9_$]+)\s*=\s*\(.*?\)\s*=>', re.M)
+RE_VAR        = re.compile(r'^\s*(?:export\s+)?(const|let|var)\s+([A-Za-z0-9_$]+)\s*=\s*(.+?);?\s*$', re.M)
 
-# very lightweight "top-level-ish" filter: ignores lines starting with whitespace + closing braces
-def rough_top_level(lines):
-    # Track simple brace depth to (very roughly) avoid inner function blocks.
+# imports (structured)
+RE_IMPORT_FULL = re.compile(
+    r'^\s*import\s+(?P<clause>.+?)\s+from\s+[\'"](?P<spec>.+?)[\'"]\s*;?\s*$',
+    re.M
+)
+RE_IMPORT_SIDE = re.compile(r'^\s*import\s+[\'"](?P<spec>.+?)[\'"]\s*;?\s*$', re.M)
+
+# exports
+RE_EXPORT_FUNC    = re.compile(r'^\s*export\s+function\s+([A-Za-z_$][\w$]*)\s*\(', re.M)
+RE_EXPORT_VAR     = re.compile(r'^\s*export\s+(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=', re.M)
+RE_EXPORT_NAMED   = re.compile(r'^\s*export\s*{\s*([^}]+)\s*}\s*;?\s*$', re.M)
+RE_EXPORT_DEFAULT = re.compile(r'^\s*export\s+default\s+([A-Za-z_$][\w$]*)\b', re.M)
+
+def rough_top_level(lines: str):
     depth = 0
     for ln in lines.splitlines():
         open_count = ln.count('{')
         close_count = ln.count('}')
-        # decide top-level by previous depth
         yield ln, depth == 0
         depth += open_count - close_count
 
 def infer_type(init_expr: str) -> str:
     s = init_expr.strip()
-    # Strip trailing comments
     s = re.sub(r'//.*$', '', s).strip()
     s = re.sub(r'/\*.*?\*/', '', s, flags=re.S).strip()
 
-    # Literals
     if re.match(r'^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$', s):
         return "number"
     if re.match(r"""^(['"]).*\1$""", s):
@@ -73,50 +78,157 @@ def infer_type(init_expr: str) -> str:
         return "array"
     if s.startswith('{'):
         return "object"
-    # new Something(...)
     m = re.match(r'^new\s+([A-Za-z0-9_$\.]+)\s*\(', s)
-    if m:
-        return m.group(1)
-    # Qualified call like Math.hypot(...), THREE.Matrix3(...), Some.ns(...)
+    if m: return m.group(1)
     m = re.match(r'^([A-Za-z0-9_$\.]+)\s*\(', s)
-    if m:
-        return f"{m.group(1)}"
-    # reference / identifier / member
+    if m: return f"{m.group(1)}"
     m = re.match(r'^([A-Za-z0-9_$\.]+)(?:\W|$)', s)
-    if m:
-        return m.group(1)
+    if m: return m.group(1)
     return "unknown"
 
+# ---------- NEW: structured imports / exports / usage ----------
+def parse_imports(text: str):
+    """
+    Returns list of dicts:
+      {"kind": "default"|"named"|"ns",
+       "local": <localName or None>,
+       "exported": <exportedName or None>,   # for named/default
+       "members": [<exportedName>...] or None, # for named only (if multiple)
+       "spec": "./path"}
+    """
+    imports = []
+
+    # side-effect imports -> we skip for edges (no bindings)
+    for m in RE_IMPORT_SIDE.finditer(text):
+        # keep if you want file->file edges for side effects:
+        imports.append({"kind": "side", "local": None, "exported": None, "members": None, "spec": m.group("spec")})
+
+    for m in RE_IMPORT_FULL.finditer(text):
+        clause = m.group("clause").strip()
+        spec   = m.group("spec")
+
+        # namespace: import * as ns from '...'
+        m_ns = re.match(r'^\*\s+as\s+([A-Za-z_$][\w$]*)$', clause)
+        if m_ns:
+            imports.append({"kind": "ns", "local": m_ns.group(1), "exported": None, "members": None, "spec": spec})
+            continue
+
+        # default + maybe named: import foo, { a as b, c } from '...'
+        m_def_named = re.match(r'^([A-Za-z_$][\w$]*)\s*,\s*{\s*([^}]+)\s*}$', clause)
+        if m_def_named:
+            default_local = m_def_named.group(1)
+            named_block   = m_def_named.group(2)
+            imports.append({"kind": "default", "local": default_local, "exported": "default", "members": None, "spec": spec})
+            named = []
+            for part in named_block.split(','):
+                part = part.strip()
+                if not part: continue
+                if ' as ' in part:
+                    exp, loc = [x.strip() for x in part.split(' as ', 1)]
+                else:
+                    exp, loc = part, part
+                imports.append({"kind": "named", "local": loc, "exported": exp, "members": None, "spec": spec})
+            continue
+
+        # named only: import { a as b, c } from '...'
+        m_named = re.match(r'^{\s*([^}]+)\s*}$', clause)
+        if m_named:
+            named_block = m_named.group(1)
+            for part in named_block.split(','):
+                part = part.strip()
+                if not part: continue
+                if ' as ' in part:
+                    exp, loc = [x.strip() for x in part.split(' as ', 1)]
+                else:
+                    exp, loc = part, part
+                imports.append({"kind": "named", "local": loc, "exported": exp, "members": None, "spec": spec})
+            continue
+
+        # default only: import Foo from '...'
+        m_def = re.match(r'^([A-Za-z_$][\w$]*)$', clause)
+        if m_def:
+            imports.append({"kind": "default", "local": m_def.group(1), "exported": "default", "members": None, "spec": spec})
+            continue
+
+        # fallback: leave it as a raw entry
+        imports.append({"kind": "unknown", "local": None, "exported": None, "members": None, "spec": spec})
+
+    return imports
+
+def parse_exports(text: str):
+    """
+    Returns a map of exported name -> local symbol name (when we can tell).
+    For default exports we map 'default' -> localName when it’s `export default localName`.
+    """
+    exp = {}
+
+    for m in RE_EXPORT_FUNC.finditer(text):
+        name = m.group(1)
+        exp[name] = name
+
+    for m in RE_EXPORT_VAR.finditer(text):
+        name = m.group(1)
+        exp[name] = name
+
+    for m in RE_EXPORT_NAMED.finditer(text):
+        block = m.group(1)
+        for part in block.split(','):
+            part = part.strip()
+            if not part: continue
+            if ' as ' in part:
+                local, exported = [x.strip() for x in part.split(' as ', 1)]
+            else:
+                local = exported = part
+            exp[exported] = local
+
+    # default export bound to an identifier
+    for m in RE_EXPORT_DEFAULT.finditer(text):
+        local = m.group(1)
+        exp["default"] = local
+
+    return exp
+
+def build_usage_text(text: str):
+    # strip import and export lines to reduce false positives in usage scans
+    t = RE_IMPORT_FULL.sub('', text)
+    t = RE_IMPORT_SIDE.sub('', t)
+    t = RE_EXPORT_NAMED.sub('', t)
+    t = RE_EXPORT_DEFAULT.sub('', t)
+    # leave function/var exports — they still show real usage if referenced below
+    return t
+
+# -------------------------
+# Parse a single JS/TS file
+# -------------------------
 def parse_js(file_path: Path):
     text = file_path.read_text(encoding="utf-8", errors="ignore")
 
-    # imports
-    imports = RE_IMPORT.findall(text)
+    imports = parse_imports(text)
+    exports = parse_exports(text)
+    usage_text = build_usage_text(text)
 
-    # functions (declarations)
+    # functions
     fn_names = []
     for m in RE_FUNC_DECL.finditer(text):
         name = m.group(1) or m.group(2)
-        if name:
-            fn_names.append(name)
-    # arrow function assignments
+        if name: fn_names.append(name)
     for m in RE_FUNC_EXPR.finditer(text):
         name = m.group(1)
-        if name:
-            fn_names.append(name)
+        if name: fn_names.append(name)
 
-    # variables/consts (roughly top-level only)
+    # top-level vars
     top_vars = {}
     for ln, is_top in rough_top_level(text):
-        if not is_top:
-            continue
+        if not is_top: continue
         m = RE_VAR.match(ln)
         if m:
-            kind, name, init = m.group(1), m.group(2), m.group(3)
+            _, name, init = m.group(1), m.group(2), m.group(3)
             top_vars[name] = infer_type(init)
 
     return {
         "imports": imports,
+        "exports": exports,       # exportedName -> localName
+        "usage_text": usage_text, # code minus import/export boilerplate
         "functions": fn_names,
         "vars": top_vars
     }
@@ -136,7 +248,7 @@ def build_file_box(rel_path, label, x, y, w=FILE_W, h=FILE_H):
 
 def build_function_cells(function_names, rel_path, x, y, w=CELL_W, h=CELL_H, vgap=STACK_VGAP):
     cells = []
-    id_map = {}  # name -> id
+    id_map = {}
     base = f"fn_{_sanitize(rel_path)}"
     for i, fn in enumerate(function_names):
         cell_id = next_id(base)
@@ -152,7 +264,7 @@ def build_function_cells(function_names, rel_path, x, y, w=CELL_W, h=CELL_H, vga
 
 def build_var_cells(vars_dict, rel_path, x, y, w=CELL_W, h=CELL_H, vgap=STACK_VGAP):
     cells = []
-    id_map = {}  # var -> [ids]
+    id_map = {}
     base = f"var_{_sanitize(rel_path)}"
     for i, (var_name, var_type) in enumerate(vars_dict.items()):
         cell_id = next_id(f"{base}_{_sanitize(var_name)}")
@@ -184,7 +296,7 @@ def build_edge(source_id, target_id, points=None, curved=False):
     """
 
 # -------------------------
-# Main: scan, parse, layout, emit
+# Main
 # -------------------------
 def main():
     src_root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else DEFAULT_SRC_ROOT.resolve()
@@ -192,7 +304,7 @@ def main():
         print(f"[!] Source root not found: {src_root}")
         sys.exit(1)
 
-    js_exts = {".js", ".mjs", ".cjs", ".jsx", ".ts", ".tsx"}  # include TS if present (we still regex)
+    js_exts = {".js", ".mjs", ".cjs", ".jsx", ".ts", ".tsx"}
     files = sorted([p for p in src_root.rglob("*") if p.is_file() and p.suffix in js_exts])
 
     files_data = {}
@@ -202,10 +314,10 @@ def main():
         except Exception as e:
             print(f"[warn] Failed to parse {p}: {e}")
 
-    # Layout grid positions for file boxes
-    file_positions = {}  # path -> (x, y)
+    # positions
+    file_positions = {}
     row = col = 0
-    for i, p in enumerate(files):
+    for p in files:
         x = col * X_GAP
         y = row * Y_GAP
         file_positions[p] = (x, y)
@@ -214,13 +326,12 @@ def main():
             col = 0
             row += 1
 
-    # Build XML
+    # build cells
     xml_cells = []
-    file_box_ids = {}   # path -> file_id
-    var_ids = {}        # path -> {var: [ids]}
-    fn_ids = {}         # path -> {fn: id}
+    file_box_ids = {}
+    var_ids = {}
+    fn_ids = {}
 
-    # File boxes + stacks
     for p in files:
         rel = p.relative_to(src_root)
         x, y = file_positions[p]
@@ -228,30 +339,21 @@ def main():
         file_box_ids[p] = fid
         xml_cells.append(fxml)
 
-        data = files_data.get(p, {"vars": {}, "functions": [], "imports": []})
-        # Vars (left/below)
-        vx = x + VARS_OFFSET[0]
-        vy = y + VARS_OFFSET[1]
+        data = files_data.get(p, {"vars": {}, "functions": [], "imports": [], "exports": {}, "usage_text": ""})
+
+        # vars
+        vx, vy = x + VARS_OFFSET[0], y + VARS_OFFSET[1]
         vmap, vcells = build_var_cells(data.get("vars", {}), str(rel), vx, vy, CELL_W, CELL_H, STACK_VGAP)
         var_ids[p] = vmap
         xml_cells.extend(vcells)
 
-        # Functions (right)
-        fx = x + FUNCS_OFFSET[0]
-        fy = y + FUNCS_OFFSET[1]
+        # functions
+        fx, fy = x + FUNCS_OFFSET[0], y + FUNCS_OFFSET[1]
         fmap, fcells = build_function_cells(data.get("functions", []), str(rel), fx, fy, CELL_W, CELL_H, STACK_VGAP)
         fn_ids[p] = fmap
         xml_cells.extend(fcells)
 
-    # Import edges between file boxes
-    # Try to resolve import specifiers to files in the set; simple heuristic:
-    # - absolute-like starting with "." resolve relative to importing file
-    # - otherwise, skip (external deps)
-    edges = []
-    import_map = {}  # for optional dedup if desired
-
-    # Build a map from module key -> path to try resolve quickly
-    # Key candidates: relative path without extension, with extension
+    # path keys for quick resolution
     path_key_map = {}
     for p in files:
         rel = p.relative_to(src_root)
@@ -259,49 +361,123 @@ def main():
         path_key_map[noext] = p
         path_key_map[str(rel)] = p
 
-    for p in files:
-        data = files_data.get(p, {})
-        for spec in data.get("imports", []):
-            tgt_path = None
-            if spec.startswith("."):
-                # relative
-                base = (p.parent / spec).resolve()
-                # Try exact file or with common JS/TS extensions or default index
-                candidates = [
-                    base,
-                    base.with_suffix(".js"),
-                    base.with_suffix(".mjs"),
-                    base.with_suffix(".cjs"),
-                    base.with_suffix(".jsx"),
-                    base.with_suffix(".ts"),
-                    base.with_suffix(".tsx"),
-                    base / "index.js",
-                    base / "index.ts",
-                    base / "index.jsx",
-                    base / "index.tsx",
-                ]
-                for c in candidates:
-                    try:
-                        relc = c.resolve().relative_to(src_root)
-                    except Exception:
-                        continue
-                    # if we actually scanned that file
-                    if c in files:
-                        tgt_path = c
-                        break
-                    # fallback: if a key match exists
+    # helper to resolve import spec -> target file
+    def resolve_spec(importing_file: Path, spec: str):
+        if spec.startswith("."):
+            base = (importing_file.parent / spec).resolve()
+            candidates = [
+                base,
+                base.with_suffix(".js"), base.with_suffix(".mjs"), base.with_suffix(".cjs"),
+                base.with_suffix(".jsx"), base.with_suffix(".ts"), base.with_suffix(".tsx"),
+                base / "index.js", base / "index.ts", base / "index.jsx", base / "index.tsx",
+            ]
+            for c in candidates:
+                if c in files:
+                    return c
+                try:
+                    relc = c.resolve().relative_to(src_root)
                     key_noext = str(relc.with_suffix(""))
                     if key_noext in path_key_map:
-                        tgt_path = path_key_map[key_noext]
-                        break
-            else:
-                # external module (skip)
-                pass
+                        return path_key_map[key_noext]
+                except Exception:
+                    pass
+        # external module: ignore
+        return None
 
-            if tgt_path and tgt_path in file_box_ids:
-                src_id = file_box_ids[p]
-                dst_id = file_box_ids[tgt_path]
-                # Build an edge (curved for readability)
+    # Export map cache: path -> {exported -> local}
+    export_map = {p: files_data[p].get("exports", {}) for p in files}
+
+    # edge dedup
+    seen_edges = set()
+    edges = []
+
+    # Build a quick lookup: for a given path and local symbol name, get its cell id (var or fn)
+    def symbol_cell_id(path: Path, local_name: str):
+        # function?
+        fid = fn_ids.get(path, {}).get(local_name)
+        if fid: return fid
+        # var? (may be multiple duplicate cells if same var captured twice; we take first)
+        vids = var_ids.get(path, {}).get(local_name)
+        if vids: return vids[0]
+        return None
+
+    for p in files:
+        pdata = files_data.get(p, {})
+        usage = pdata.get("usage_text", "")
+        for imp in pdata.get("imports", []):
+            tgt_path = resolve_spec(p, imp.get("spec", ""))
+            if not tgt_path or tgt_path not in file_box_ids:
+                continue
+
+            # Decide if the import is used in this file (cheap heuristic)
+            kind = imp.get("kind")
+            src_sym_id = None
+            dst_sym_id = None
+
+            if kind == "named":
+                local = imp["local"]
+                exported = imp["exported"]
+                # used?
+                if not re.search(rf'\b{re.escape(local)}\b', usage):
+                    continue
+                # source: exported symbol in target file -> resolve to local name there
+                exp_local = export_map.get(tgt_path, {}).get(exported)
+                if exp_local:
+                    src_sym_id = symbol_cell_id(tgt_path, exp_local)
+                # dest: local binding (var/func cell if we created one)
+                dst_sym_id = symbol_cell_id(p, local)
+
+            elif kind == "default":
+                local = imp["local"]
+                if not re.search(rf'\b{re.escape(local)}\b', usage):
+                    continue
+                exp_local = export_map.get(tgt_path, {}).get("default")
+                if exp_local:
+                    src_sym_id = symbol_cell_id(tgt_path, exp_local)
+                dst_sym_id = symbol_cell_id(p, local)
+
+            elif kind == "ns":
+                ns = imp["local"]
+                # Find ns.member usages; collect unique member names
+                members = set(m.group(1) for m in re.finditer(rf'\b{re.escape(ns)}\.([A-Za-z_$][\w$]*)', usage))
+                if not members:
+                    # no specific member usage found — optionally connect file->file
+                    src_id = file_box_ids[tgt_path]
+                    dst_id = file_box_ids[p]
+                    key = (src_id, dst_id)
+                    if key not in seen_edges:
+                        seen_edges.add(key)
+                        edges.append(build_edge(src_id, dst_id, curved=True))
+                    continue
+                for member in members:
+                    exp_local = export_map.get(tgt_path, {}).get(member)
+                    src_sym_id = symbol_cell_id(tgt_path, exp_local) if exp_local else None
+                    dst_sym_id = None  # namespace import doesn’t create a local symbol per member
+                    # prefer symbol->file if we found the member, else file->file
+                    src_id = src_sym_id or file_box_ids[tgt_path]
+                    dst_id = file_box_ids[p]
+                    key = (src_id, dst_id)
+                    if key not in seen_edges:
+                        seen_edges.add(key)
+                        edges.append(build_edge(src_id, dst_id, curved=True))
+                continue  # done with this import
+
+            else:
+                # side-effect / unknown: make a file->file edge
+                src_id = file_box_ids[tgt_path]
+                dst_id = file_box_ids[p]
+                key = (src_id, dst_id)
+                if key not in seen_edges:
+                    seen_edges.add(key)
+                    edges.append(build_edge(src_id, dst_id, curved=True))
+                continue
+
+            # Fallbacks and emit
+            src_id = src_sym_id or file_box_ids[tgt_path]
+            dst_id = dst_sym_id or file_box_ids[p]
+            key = (src_id, dst_id)
+            if key not in seen_edges:
+                seen_edges.add(key)
                 edges.append(build_edge(src_id, dst_id, curved=True))
 
     xml_cells.extend(edges)
