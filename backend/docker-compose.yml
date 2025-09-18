@@ -30,22 +30,6 @@ services:
       retries: 5
     networks: [appnet]
 
-  # Local-only proxy for Compass/admin (Option B)
-  mongo_local_proxy:
-    image: alpine/socat:1.8.0.0-r3
-    container_name: mongo_local_proxy
-    command: >
-      -d -d
-      TCP-LISTEN:27017,bind=127.0.0.1,fork,reuseaddr
-      TCP:mongo:27017
-    ports:
-      - "127.0.0.1:27017:27017"
-    depends_on:
-      mongo: { condition: service_healthy }
-    restart: "no"
-    networks: [appnet]
-    profiles: ["admin"]   # <<< only starts if explicitly requested
-
   # ---------- WORKERS ----------
   scraper_worker_0:
     build: .
