@@ -44,6 +44,7 @@ services:
       mongo: { condition: service_healthy }
     restart: "no"
     networks: [appnet]
+    profiles: ["admin"]   # <<< only starts if explicitly requested
 
   # ---------- WORKERS ----------
   scraper_worker_0:
