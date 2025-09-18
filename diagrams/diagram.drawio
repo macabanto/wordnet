@@ -1,0 +1,418 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="Page-1" id="AUTO-GEN">
+    <mxGraphModel dx="5650" dy="2553" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="file_align_kabsch_js_1" value="align/kabsch.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="1170.0008369302861" y="560.4393355739227" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_align_kabsch_js_1" value="meanVec3()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="518.529208000993" y="39.998199975073064" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_align_kabsch_js_2" value="covariance3x3()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="510.758196031594" y="162.11821115998316" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_align_kabsch_js_3" value="nearestRotationPolar()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="518.5126374140623" y="258.6532205873626" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_align_kabsch_js_4" value="kabschRotation()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="520.0644478189386" y="291.5517072976465" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_align_kabsch_js_5" value="transpose()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="759.8059754280741" y="659.2549030586965" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_align_kabsch_js_6" value="invert3x3()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="766.1091431961031" y="768.9599451291475" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_align_orient_js_1" value="align/orient.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="280.00499442810815" y="142.11492903422993" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_align_orient_js_1" value="composeQuaternion()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="740.0046724788214" y="563.7464262823329" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_align_orient_js_2" value="slerpQuat()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="752.2381604988909" y="713.9224312712885" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_align_orient_js_3" value="toEulerAngles()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="777.3552346372737" y="826.5304173406143" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_config_js_1" value="config.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="1000.0006285583863" y="314.6304386308434" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="var_config_js_CONFIG_1" value="CONFIG: object" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="61.24562756468083" y="768.9563558055992" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_data_id_js_1" value="data/id.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="607.4221339067565" y="1047.9854629759584" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="var_data_id_js_getId_1" value="getId: unknown" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="605.9864111308377" y="1140.0029774884224" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_data_id_js_1" value="getId()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-605.0045082479166" y="620.4397623196237" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_debug_poseHUD_js_1" value="debug/poseHUD.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="518.5088597466546" y="934.8127888482328" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_debug_poseHUD_js_1" value="createPoseHUD()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="270.0068834552886" y="415.4586270891923" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_debug_poseHUD_js_2" value="update()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="234.16012635403575" y="1189.893807912352" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_debug_poseHUD_js_3" value="toggle()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="230.14699161759484" y="1253.4167201780167" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_debug_poseHUD_js_4" value="fmt()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="220.42836850864205" y="1308.021172337921" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_flow_transition_js_1" value="flow/transition.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-400.000183271629" y="338.6782111599831" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="var_flow_transition_js_ZERO_1" value="ZERO: THREE.Vector3" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="510.00304187973444" y="218.65322058736263" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_flow_transition_js_easeInOutQuad_1" value="easeInOutQuad: unknown" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="548.5069287155748" y="352.94118039419993" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_flow_transition_js_intersect_1" value="intersect: unknown" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="779.4406632464136" y="449.99683972208805" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_flow_transition_js_subtract_1" value="subtract: unknown" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="775.7316150536398" y="603.7464262823329" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_flow_transition_js_PendingTimers_1" value="PendingTimers: Set" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="773.8757743988031" y="887.9880366558544" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_flow_transition_js_TransitionManager_1" value="TransitionManager: unknown" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="765.2929568218143" y="944.8161134067559" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_1" value="buildTargetMapFromDoc()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="729.8934058756632" y="117.92645393326445" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_2" value="delay()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="724.7541723982289" y="233.80234118330793" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_3" value="clearAllDelays()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="742.9957469017099" y="308.67774459777627" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_4" value="newToken()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="978.8670569674191" y="464.372676952135" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_5" value="cancelAll()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="974.0414867504262" y="562.6909401036557" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_6" value="track()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="972.3694016812188" y="620.4420529366387" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_7" value="rafProgress()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="959.0285200979663" y="668.9322707214716" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_8" value="frame()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="962.7382893599241" y="730.2965652926551" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_9" value="tweenPosition()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="973.4094740002407" y="770.2965652926551" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_10" value="bakeGroupOffsetToChildren()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="971.8473144291218" y="820.9293900451515" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_11" value="recenterAnimate()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="979.9695318732938" y="882.7533962580279" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_12" value="followMovingAnchor()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="972.4871477714918" y="942.7443660035666" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_13" value="easeInOutQuad()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="968.3338219033897" y="998.0557750289594" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_14" value="intersect()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="965.1211754419713" y="1053.3664909272304" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_15" value="subtract()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="965.9811055134568" y="1107.9829738151482" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_16" value="TransitionManager()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="99.9976633357623" y="415.4525630744322" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_17" value="cancel()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="430.4707722134615" y="1264.2542652632053" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_18" value="guard()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="430.5679862769575" y="1320.038407223365" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_flow_transition_js_19" value="freshTasks()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="437.52325767863977" y="1374.3224895334663" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_graph_anchors_js_1" value="graph/anchors.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-330.00274071364447" y="542.6883095041039" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_graph_anchors_js_1" value="makeAnchorAt()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-539.9930471618089" y="927.9913608488926" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_graph_geometry_js_1" value="graph/geometry.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-719.9957763038296" y="523.7394742130385" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_graph_geometry_js_1" value="buildGraph()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-160.00762850726966" y="594.3736730623422" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_graph_sets_js_1" value="graph/sets.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="785.9852516866582" y="1304.2502043254856" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_graph_sets_js_1" value="intersect()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="237.52715031717383" y="1605.2719720087816" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_graph_sets_js_2" value="subtract()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="238.89372414217672" y="1665.2892071350898" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_graph_sprites_js_1" value="graph/sprites.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="280.00818604459494" y="584.3689116748445" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_graph_sprites_js_1" value="createTextSprite()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-604.9998716132168" y="708.9268070202323" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_graph_state_js_1" value="graph/state.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-1040.000544666872" y="544.375164475973" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="var_graph_state_js_byId_1" value="byId: Map" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="660.0032397078727" y="1565.2768206714773" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_graph_state_js_nodeObjects_1" value="nodeObjects: array" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-260.0025963298558" y="469.9952388854299" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_graph_state_js_centeredNode_1" value="centeredNode: null" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="245.00459842648695" y="914.8459041701198" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_graph_state_js_nodeById_1" value="nodeById: unknown" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="480.00342062083746" y="1490.0049876619273" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_graph_state_js_getCentered_1" value="getCentered: unknown" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="410.1483223501789" y="1870.0041466618868" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_graph_state_js_setCentered_1" value="setCentered: unknown" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="593.8743261073168" y="1820.0039073481294" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_graph_state_js_1" value="registerNode()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-605.0087193649163" y="800.0023011173757" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_graph_state_js_2" value="removeNode()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-189.9998945956338" y="820.004182100155" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_graph_state_js_3" value="clearNodeGroup()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-860.0041109853216" y="604.372063251264" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_graph_state_js_4" value="currentSynIdsFromScene()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-399.9978524515748" y="820.9280706425589" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_graph_state_js_5" value="nodeById()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-560.0022351657326" y="1013.3694219015723" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_graph_state_js_6" value="getCentered()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="239.84916431732927" y="2173.8904352969453" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_graph_state_js_7" value="setCentered()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="239.6758130434593" y="2285.0832737687515" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_main_js_1" value="main.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-40.002151872150876" y="254.62606848226537" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="var_main_js_axesHelper_1" value="axesHelper: THREE.AxesHelper" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="765.6571966530282" y="273.01845050781884" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_main_js_controls_1" value="controls: installControls" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="787.4218903486064" y="348.67774459777627" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_main_js_hud_1" value="hud: createPoseHUD" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1017.9725864010577" y="504.372676952135" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_main_js_1" value="animate()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="958.5021023995596" y="231.50249584234274" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_scene_control_js_1" value="scene/control.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="334.9967284327265" y="658.935582814338" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_scene_control_js_1" value="installControls()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="437.524536004903" y="415.44803918260754" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_scene_control_js_2" value="onMouseMove()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="239.64988040194595" y="2119.1546489165025" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_scene_control_js_3" value="onMouseDown()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="239.8585393934569" y="2230.3951444668855" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_scene_control_js_4" value="onMouseUp()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="245.51497907478398" y="2340.2996155111596" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_scene_control_js_5" value="tick()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="255.73063957869152" y="2458.52736073266" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_scene_scene_js_1" value="scene/scene.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="100.00256747742424" y="583.7426417377267" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="var_scene_scene_js_WIDTH_1" value="WIDTH: window.innerWidth" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="413.87376627063065" y="2039.9951900540905" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_scene_scene_js_HEIGHT_1" value="HEIGHT: window.innerHeight" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="530.0035551092782" y="2170.00149182325" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_scene_scene_js_DEVICE_PIXEL_RATIO_1" value="DEVICE_PIXEL_RATIO: window.devicePixelRatio" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="510.00489795067836" y="1759.9976538591905" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_scene_scene_js_scene_1" value="scene: THREE.Scene" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-340.00426668833825" y="708.931244821594" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_scene_scene_js_camera_1" value="camera: THREE.PerspectiveCamera" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-270.00161042052287" y="415.46091636267556" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_scene_scene_js_renderer_1" value="renderer: THREE.WebGLRenderer" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-650.0007203183824" y="324.6291090183254" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_scene_scene_js_raycaster_1" value="raycaster: THREE.Raycaster" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="61.24518014375903" y="348.6849726903836" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_scene_scene_js_mouse_1" value="mouse: THREE.Vector2" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-139.99519216084224" y="348.68239118183715" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_scene_scene_js_nodeGroup_1" value="nodeGroup: THREE.Group" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-829.9973395145187" y="748.9274320021004" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="var_scene_scene_js_debugEl_1" value="debugEl: document.getElementById" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="61.246887726987325" y="2844.6595455384504" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_scene_scene_js_1" value="attachResize()" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-69.99932668948117" y="415.44842628888784" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="file_setup_js_1" value="setup.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-80.00065479451052" y="489.99683972208805" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_1" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_config_js_CONFIG_1" target="file_data_api_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_2" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="file_data_api_js_1" target="file_flow_transition_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_3" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_scene_scene_js_scene_1" target="file_flow_transition_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_4" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_scene_scene_js_nodeGroup_1" target="file_flow_transition_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_5" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="file_data_api_js_1" target="file_flow_transition_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_6" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="fn_data_id_js_1" target="file_flow_transition_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_7" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="fn_graph_state_js_5" target="file_flow_transition_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_8" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="fn_graph_state_js_4" target="file_flow_transition_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_9" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_graph_state_js_nodeObjects_1" target="file_flow_transition_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_10" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="fn_graph_state_js_2" target="file_flow_transition_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_11" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="fn_graph_state_js_1" target="file_flow_transition_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_12" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="fn_graph_anchors_js_1" target="file_flow_transition_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_13" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="fn_graph_sprites_js_1" target="file_flow_transition_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_14" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_scene_scene_js_scene_1" target="file_graph_anchors_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_15" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_scene_scene_js_nodeGroup_1" target="file_graph_geometry_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_16" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="fn_graph_sprites_js_1" target="file_graph_geometry_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_17" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="fn_data_id_js_1" target="file_graph_geometry_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_18" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="fn_graph_state_js_1" target="file_graph_geometry_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_19" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="fn_graph_state_js_3" target="file_graph_geometry_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_20" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_config_js_CONFIG_1" target="file_graph_sprites_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_21" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_scene_scene_js_nodeGroup_1" target="file_graph_state_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_22" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_config_js_CONFIG_1" target="file_main_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_23" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_scene_scene_js_scene_1" target="file_main_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_24" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_scene_scene_js_camera_1" target="file_main_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_25" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_scene_scene_js_renderer_1" target="file_main_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_26" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_scene_scene_js_raycaster_1" target="file_main_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_27" style="curved=1;endArrow=classic;html=1;rounded=0;" parent="1" source="var_scene_scene_js_mouse_1" target="file_main_js_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_28" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="fn_scene_scene_js_1" target="file_main_js_1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_29" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="fn_scene_control_js_1" target="file_main_js_1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_30" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="var_graph_state_js_nodeObjects_1" target="file_main_js_1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_31" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="file_setup_js_1" target="file_main_js_1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_32" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="file_flow_transition_js_1" target="file_main_js_1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_33" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="fn_flow_transition_js_16" target="file_main_js_1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_34" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="fn_debug_poseHUD_js_1" target="file_main_js_1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_35" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="var_config_js_CONFIG_1" target="file_scene_control_js_1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_36" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="var_config_js_CONFIG_1" target="file_scene_scene_js_1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_37" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="var_config_js_CONFIG_1" target="file_setup_js_1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_38" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="file_data_api_js_1" target="file_setup_js_1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_39" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="fn_graph_geometry_js_1" target="file_setup_js_1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="KwV3ZJstNrZ89S8ukQLU-2" value="" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="var_config_js_CONFIG_1" target="file_data_api_js_1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="56" y="562" as="sourcePoint" />
+            <mxPoint x="-332" y="527" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="file_data_api_js_1" value="data/api.js" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="-109.99600658598752" y="670.2928824554378" width="180" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
